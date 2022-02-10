@@ -2,14 +2,20 @@ const express = require('express')
 const router = express.Router()
 const { Posts } = require("../models")
 
-router.get("/",async (req, res)=>{
+router.get("/", async (req, res) => {
     const listOfPosts = await Posts.findAll()
     res.json(listOfPosts)
 })
-router.post("/",async (req,res)=>{
+router.post("/", async (req, res) => {
     const post = req.body
-    console.log("hahahahaha", req);
+    // console.log("hahahahaha", req);
     await Posts.create(post)
+    res.json(post)
+})
+
+router.get("/byId/:id", async (req, res) => {
+    const id = req.params.id
+    const post = await Posts.findByPk(id)
     res.json(post)
 })
 
