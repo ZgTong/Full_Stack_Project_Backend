@@ -12,9 +12,20 @@ router.get("/:postId", async (req, res) => {
 
 router.post("/", validateToken, async (req, res) => {
     const comment = req.body
-    console.log("create comment:", req);
-    await Comments.create(comment)
-    res.json(comment)
+    const username = req.user.username
+    comment.username = username
+    const newComment = await Comments.create(comment)
+    res.json(newComment)
+})
+
+router.delete("/:commentId", validateToken, async (req, res) => {
+    const commentId = req.params.commentId
+    await Comments.destroy({
+        where: {
+            id: commentId
+        }
+    })
+    res.json("DELETE SUCCESSFULLY")
 })
 
 module.exports = router
