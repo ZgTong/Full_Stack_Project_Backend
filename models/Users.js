@@ -1,18 +1,21 @@
-module.exports = (sequelize, DataTypes)=>{
-    const Users = sequelize.define("Users",{
-        password:{
+module.exports = (sequelize, DataTypes) => {
+    const Users = sequelize.define("Users", {
+        password: {
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull: false,
         },
-        username:{
+        username: {
             type: DataTypes.STRING,
-            allowNull:false,
+            allowNull: false,
         }
     });
-    Users.associate = (models)=>{
-        Users.hasMany(models.Posts,{
-            onDelete:"cascade"
-       }) 
+    Users.associate = (models) => {
+        Users.hasMany(models.Posts, {
+            onDelete: "cascade"
+        })
+        Users.hasMany(models.Likes, {
+            onDelete: "cascade"
+        })
     }
     return Users;
 }
