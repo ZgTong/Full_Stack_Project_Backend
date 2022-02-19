@@ -4,10 +4,7 @@ const { Users } = require("../models")
 const bcrypt = require("bcrypt")
 const { validateToken } = require("../middlewares/AuthMiddleware")
 const token = require("jsonwebtoken")
-// router.get("/", async (req, res) => {
-//     const listOfPosts = await Posts.findAll()
-//     res.json(listOfPosts)
-// })
+
 router.post("/", async (req, res) => {
     const { username, password } = req.body
     bcrypt.hash(password, 10).then((hash) => {
@@ -22,7 +19,6 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     const { username, password } = req.body
-
     const user = await Users.findOne({ where: { username } })
     if (!user) res.json({ error: "User doesn't exist" })
     else {
@@ -41,10 +37,16 @@ router.post("/login", async (req, res) => {
             }
         })
     }
-
 })
 
 router.get("/auth", validateToken, (req, res) => {
     res.json(req.user)
 })
+
+router.get("/basicinfo/:id", async (req, res) => {
+    const id = req.params.id
+    const basicInfo = await Users.findByPk(id, { attributes: { exclude: ["password"] } })
+    res.json(basicInfo)
+})
+
 module.exports = router
